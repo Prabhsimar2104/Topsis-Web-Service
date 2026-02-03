@@ -1,4 +1,8 @@
 node_modules/
-uploads/*
-results/*
 .env
+
+uploads/*
+!uploads/.gitkeep
+
+results/*
+!results/.gitkeep
