@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOPSIS Analysis Service</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-animation">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 3L5 7L9 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M15 13L19 17L15 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M5 7H19V17H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h1>TOPSIS Analysis</h1>
+            <p class="subtitle">Multi-Criteria Decision Making Made Easy</p>
+        </div>
+
+        <form action="/submit" method="post" enctype="multipart/form-data" id="topsisForm">
+            <div class="form-group">
+                <label for="file">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V9L13 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M13 2V9H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Input CSV File
+                </label>
+                <div class="file-input-wrapper">
+                    <input type="file" name="file" id="file" accept=".csv" required>
+                    <label for="file" class="file-input-label" id="fileLabel">
+                        <span class="file-icon" id="fileIcon">📄</span>
+                        <span class="file-text" id="fileText">Choose CSV file</span>
+                        <span class="upload-arrow">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M17 8L12 3L7 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M12 3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                    </label>
+                    <div class="file-name-display" id="fileNameDisplay">
+                        <div class="file-status" id="fileStatus">
+                            <svg class="status-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            <span class="status-text">No file chosen</span>
+                        </div>
+                    </div>
+                </div>
+                <small>Upload your decision matrix in CSV format</small>
+            </div>
+
+            <div class="form-group">
+                <label for="weights">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Weights
+                </label>
+                <input type="text" name="weights" id="weights" placeholder="e.g., 1,1,1,1" required>
+                <small>Comma-separated numeric values for each criterion</small>
+            </div>
+
+            <div class="form-group">
+                <label for="impacts">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 20V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 20V4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M6 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Impacts
+                </label>
+                <input type="text" name="impacts" id="impacts" placeholder="e.g., +,+,-,+" required>
+                <small>Use '+' for beneficial and '-' for non-beneficial criteria</small>
+            </div>
+
+            <div class="form-group">
+                <label for="email">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Email Address
+                </label>
+                <input type="email" name="email" id="email" placeholder="your.email@example.com" required>
+                <small>Results will be sent to this email address</small>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <span class="btn-text">Analyze & Send Results</span>
+                <span class="btn-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+            </button>
+        </form>
+
+        <div class="info-cards">
+            <div class="info-card">
+                <div class="card-icon">🎯</div>
+                <h3>Accurate</h3>
+                <p>Precise ranking based on TOPSIS algorithm</p>
+            </div>
+            <div class="info-card">
+                <div class="card-icon">⚡</div>
+                <h3>Fast</h3>
+                <p>Get results instantly via email</p>
+            </div>
+            <div class="info-card">
+                <div class="card-icon">🔒</div>
+                <h3>Secure</h3>
+                <p>Your data is processed securely</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // File input handler with enhanced visual feedback
+        const fileInput = document.getElementById('file');
+        const fileLabel = document.getElementById('fileLabel');
+        const fileIcon = document.getElementById('fileIcon');
+        const fileText = document.getElementById('fileText');
+        const fileStatus = document.getElementById('fileStatus');
+        const statusIcon = fileStatus.querySelector('.status-icon');
+        const statusText = fileStatus.querySelector('.status-text');
+        
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                const fileName = e.target.files[0].name;
+                
+                // Update the upload button
+                fileLabel.classList.add('file-uploaded');
+                fileIcon.textContent = '✅';
+                fileText.textContent = 'File Selected';
+                
+                // Update the status display
+                fileStatus.classList.add('active');
+                statusIcon.innerHTML = `
+                    <path d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.709 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85781 7.69279 2.71537 9.79619 2.24013C11.8996 1.7649 14.1003 1.98232 16.07 2.85999" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M22 4L12 14.01L9 11.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                `;
+                statusText.textContent = fileName;
+                
+                // Add pulse animation
+                fileStatus.style.animation = 'pulse 0.5s ease-out';
+                setTimeout(() => {
+                    fileStatus.style.animation = '';
+                }, 500);
+            } else {
+                // Reset to default state
+                fileLabel.classList.remove('file-uploaded');
+                fileIcon.textContent = '📄';
+                fileText.textContent = 'Choose CSV file';
+                fileStatus.classList.remove('active');
+                statusIcon.innerHTML = `
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                `;
+                statusText.textContent = 'No file chosen';
+            }
+        });
+
+        // Drag and drop functionality
+        fileLabel.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('drag-over');
+        });
+
+        fileLabel.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.classList.remove('drag-over');
+        });
+
+        fileLabel.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('drag-over');
+            
+            if (e.dataTransfer.files.length > 0) {
+                fileInput.files = e.dataTransfer.files;
+                fileInput.dispatchEvent(new Event('change'));
+            }
+        });
+
+        // Form validation and animation
+        const form = document.getElementById('topsisForm');
+        form.addEventListener('submit', function(e) {
+            const submitBtn = form.querySelector('.submit-btn');
+            submitBtn.classList.add('loading');
+            submitBtn.querySelector('.btn-text').textContent = 'Processing...';
+        });
+
+        // Input focus animations
+        const inputs = document.querySelectorAll('input[type="text"], input[type="email"]');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+        });
+    </script>
+</body>
+</html>
