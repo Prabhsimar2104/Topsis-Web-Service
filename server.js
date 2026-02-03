@@ -54,8 +54,11 @@ app.get("/", (req, res) => {
 app.get("/test", (req, res) => {
     const inputFile = "Topsis-Dataset.csv";
     const outputFile = "results/output.csv";
+    // Fixed: Using correct variable names
+    const weights = "1,1,1,1";
+    const impacts = "+,+,-,+";
 
-    const command = `python3 topsis.py ${inputPath} "${weights}" "${impacts}" ${outputPath}`;
+    const command = `python3 topsis.py ${inputFile} "${weights}" "${impacts}" ${outputFile}`;
 
     exec(command, (error, stdout, stderr) => {
         if (error) {
@@ -426,13 +429,13 @@ app.post("/submit", upload.single("file"), (req, res) => {
     }
 
     for (let w of weightArr) {
-        if (isNaN(w)) {
+        if (isNaN(w.trim())) {
             return sendErrorPage(res, "Weights must be numeric and comma-separated (e.g., 1,2,3).");
         }
     }
 
     for (let i of impactArr) {
-        if (i !== "+" && i !== "-") {
+        if (i.trim() !== "+" && i.trim() !== "-") {
             return sendErrorPage(res, "Impacts must be either '+' or '-' (e.g., +,+,-,+).");
         }
     }
@@ -441,7 +444,9 @@ app.post("/submit", upload.single("file"), (req, res) => {
     const inputPath = file.path;
     const outputPath = `results/result_${Date.now()}.csv`;
 
-    const command = `py topsis.py ${inputPath} "${weights}" "${impacts}" ${outputPath}`;
+    // Fixed: Use 'python3' or 'py' based on your system
+    const pythonCommand = process.platform === 'win32' ? 'py' : 'python3';
+    const command = `${pythonCommand} topsis.py ${inputPath} "${weights}" "${impacts}" ${outputPath}`;
 
     exec(command, (error) => {
         if (error) {
@@ -457,5 +462,5 @@ app.post("/submit", upload.single("file"), (req, res) => {
 });
 
 app.listen(process.env.PORT || 3000, () => {
-    console.log("Server running at http://localhost:3000");
+    console.log(`Server running at http://localhost:${process.env.PORT || 3000}`);
 });
