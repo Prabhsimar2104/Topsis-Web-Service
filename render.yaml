@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: topsis-web-service
+    runtime: node
+    buildCommand: bash build.sh
+    startCommand: node server.js
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: PYTHON_VERSION
+        value: 3.11
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASS
+        sync: false
