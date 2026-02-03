@@ -55,7 +55,7 @@ app.get("/test", (req, res) => {
     const inputFile = "Topsis-Dataset.csv";
     const outputFile = "results/output.csv";
 
-    const command = `py topsis.py ${inputFile} "1,1,1,1" "+,+,-,+" ${outputFile}`;
+    const command = `python3 topsis.py ${inputPath} "${weights}" "${impacts}" ${outputPath}`;
 
     exec(command, (error, stdout, stderr) => {
         if (error) {
